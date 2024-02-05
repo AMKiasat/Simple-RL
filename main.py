@@ -81,7 +81,6 @@ if __name__ == '__main__':
     trash = True
     print("Guide: robot location= '*', charging station: 'c', trash: 't'")
     while True:
-        state_print(current_state, point, battery_percentage, trash)
         if current_state == 0:
             battery_percentage += 10
             if battery_percentage > 100:
@@ -90,6 +89,12 @@ if __name__ == '__main__':
             point += 1
         else:
             battery_percentage -= 5
+
+        state_print(current_state, point, battery_percentage, trash)
+
+        if battery_percentage <= 0 and current_state != 0:
+            print("Robot shuting down Goodbye!")
+            break
 
         reward_table = calculate_reward_table(battery_percentage, trash)
         q = calculate_q_table(reward_table, gama)
@@ -106,7 +111,5 @@ if __name__ == '__main__':
             trash = False
             point += 5
 
-        if battery_percentage <= 0 and current_state != 0:
-            print("Robot shuting down Goodbye!")
-            break
+
         time.sleep(1)
